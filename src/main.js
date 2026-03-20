@@ -1,7 +1,3 @@
-// Import CSS
-// import 'bootstrap/dist/css/bootstrap.min.css';
-import './styles/styles.scss'
-
 // Import all of Bootstrap's JS
 import * as bootstrap from 'bootstrap'
 import 'datatables.net';
