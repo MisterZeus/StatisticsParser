@@ -28,10 +28,10 @@ export default defineConfig(({ command }) => ({
   build: {
     outDir: '../dist',
     emptyOutDir: true,
-    rollupOptions: {
+    rolldownOptions: {
       input: {
         main: 'src/index.html',
-        about: 'src/about.html' 
+        about: 'src/about.html'
       }
     }
   },
@@ -65,13 +65,6 @@ export default defineConfig(({ command }) => ({
           .replace(/__VERSIONNUMBER__/g, versionnumber)
           .replace(/<!-- Google Analytics -->/g, (command === 'build') ? googleAnalytics : '<!-- Google Analytics -->');
       },
-      transform(html, id) {
-        if (id.endsWith('about.html')) {
-          return html
-            .replace(/__VERSIONNUMBER__/g, versionnumber)
-            .replace(/<!-- Google Analytics -->/g, (command === 'build') ? googleAnalytics : '<!-- Google Analytics -->');
-          }
-      }
     }
   ],
 }));
