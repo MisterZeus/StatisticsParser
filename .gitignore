@@ -109,7 +109,13 @@ src/sql/Dashboard Query Scratch.sql
 
 # Node Modules
 node_modules/
-#dist/
+
+# you need to manually copy the files from dist/ into docs/
+# if you want them live on the github pages site.
+# This is because github pages does not allow you
+# to serve files from the node_modules/ or dist/ folders.
+dist/
+
 .DS_Store
 
 # Environment Variables
