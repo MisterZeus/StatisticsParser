@@ -1,15 +1,18 @@
 # Microsoft SQL Server Statistics IO and Time Parser
+
 Sometimes reading SQL Server output from Statistics IO and Statistics Time can be a total drag. This page will help with that. Just paste in the output of Statistics IO and/or Statistics Time and press Parse. Your output will be formatted and totaled. Enjoy.
 
 Useful links:
- - [SET STATISTICS IO (Transact-SQL)](https://msdn.microsoft.com/en-us/library/ms184361.aspx)
- - [SET STATISTICS TIME (Transact-SQL)](https://msdn.microsoft.com/en-us/library/ms190287.aspx)
+
+- [SET STATISTICS IO (Transact-SQL)](https://msdn.microsoft.com/en-us/library/ms184361.aspx)
+- [SET STATISTICS TIME (Transact-SQL)](https://msdn.microsoft.com/en-us/library/ms190287.aspx)
 
 ## [Example](/Example.md)
 
 ## Development Setup
 
 ### Prerequisites
+
 - Node.js (v16 or higher)
 - npm (comes with Node.js)
 - Git
@@ -17,17 +20,20 @@ Useful links:
 ### Installation Steps
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/yourusername/StatisticsParser.git
 cd StatisticsParser
 ```
 
-2. Install dependencies:
+1. Install dependencies:
+
 ```bash
 npm install
 ```
 
 This will install all required packages including:
+
 - Vite (build tool)
 - Luxon (date/time handling)
 - DataTables (table display)
@@ -38,31 +44,34 @@ This will install all required packages including:
 ### Development
 
 1. Start the development server:
+
 ```bash
 npm run dev
 ```
 
 This will start Vite's development server with hot module replacement (HMR) enabled. The application will be available at `http://localhost:5173` by default.
 
-2. Make your changes to the code. The development server will automatically reload when you save changes.
+1. Make your changes to the code. The development server will automatically reload when you save changes.
 
 ### Building for Production
 
 1. Create a production build:
+
 ```bash
 npm run build
 ```
 
 This will create an optimized production build in the `dist` directory.
 
-2. Preview the production build locally:
+1. Preview the production build locally:
+
 ```bash
 npm run preview
 ```
 
 ### Project Structure
 
-```
+```bash
 StatisticsParser/
 ├── src/
 │   ├── assets/
