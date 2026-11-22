@@ -1,30 +1,50 @@
 
-@import "~bootstrap/scss/bootstrap";
-// @import 'datatables.net-dt/css/dataTables.dataTables.css';
-@import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
-
-$bootstrap-icons-font-dir: '/node_modules/bootstrap-icons/font/fonts';
-@import 'bootstrap-icons';
+@use "bootstrap/scss/bootstrap";
+@use "datatables.net-bs5/css/dataTables.bootstrap5.min.css";
+@use "bootstrap-icons";
 
 @media (min-width: 1200px) {
     .container {
-      max-width: 85%; /* Replace with your desired width */
+        max-width: 85%;
     }
-  }
+
+    body {
+        padding-top: 60px;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .container {
+        max-width: 100%;
+        padding-inline: 1rem;
+    }
+
+    .navbar-brand {
+        font-size: 1rem;
+    }
+
+    .button-padding {
+        flex-wrap: wrap;
+    }
+
+    .button-padding__clear {
+        margin-left: 0;
+    }
+}
+
+.intro-text {
+    max-width: 520px;
+}
 
 textarea {
-    border: 1px solid #999999;
+    border: 1px solid #999;
     width: 100%;
-    padding: 7px 0 7px 7px;
-    position: relative;
+    min-height: 10rem;
+    resize: vertical;
 }
 
 .skip-link {
     z-index: 1100;
-}
-
-label {
-    font-weight: normal;
 }
 
 table {
@@ -36,27 +56,37 @@ h1 {
 }
 
 td {
-    white-space: pre; /* CSS 2.0 */
-    white-space: pre-wrap; /* CSS 2.1 */
-    white-space: pre-line; /* CSS 3.0 */
-    white-space: -pre-wrap; /* Opera 4-6 */
-    white-space: -o-pre-wrap; /* Opera 7 */
-    white-space: -moz-pre-wrap; /* Mozilla */
-    white-space: -hp-pre-wrap; /* HP Printers */
-    word-wrap: break-word; /* IE 5+ */
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
 }
 
 .button-padding {
-    padding: 0px 7px 0px 7px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0 7px;
+}
+
+.button-padding__parse {
+    order: 1;
+}
+
+.button-padding__clear {
+    order: 2;
+    margin-left: auto;
+}
+
+.button-padding__options {
+    order: 3;
 }
 
 .button-inner-margin {
-    margin-left: 10px;
+    margin-left: 0;
 }
 
 .remove-margin {
-   padding: 0 !important;
-   margin: 0 !important;
+    padding: 0;
+    margin: 0;
 }
 
 .navbar-brand {
@@ -73,45 +103,42 @@ td {
 }
 
 .table-nonfluid {
-   width: 550px;
+    width: min(550px, 100%);
 }
 
 .statsio-total {
-    font-weight:bold;
+    font-weight: bold;
 }
 
 .statsio-column {
-    padding: 4px 20px 4px 5px !important;
+    padding: 4px 20px 4px 5px;
 }
 
 .statsio-column-small {
-    @extend .statsio-column;
-    width: 40px !important;
+    width: 40px;
 }
 
 .statsio-column-medium {
-    width: 70px !important;
+    width: 70px;
 }
 
 .statsio-column-large {
-    width: 85px !important;
+    width: 85px;
 }
 
 .statsio-column-xlarge {
-    width: 100px !important;
+    width: 100px;
 }
 
 .statsio-column-timetype {
-    width: 300px;
+    width: min(300px, 100%);
 }
 
 .statsio-column-right {
-    // text-align: right !important;
-    padding-right: 20px !important;
+    padding-right: 20px;
 }
 
 .statsio-footer-column {
-    @extend .statsio-column;
     font-weight: bold;
 }
 
@@ -150,4 +177,10 @@ td {
 
 .scroll-to-top.visible {
     display: flex;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .scroll-to-top {
+        transition: none;
+    }
 }
