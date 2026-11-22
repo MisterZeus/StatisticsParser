@@ -14,13 +14,17 @@
     </head>
 
     <body>
+        <a class="skip-link visually-hidden-focusable" href="#main-content">Skip to main content</a>
 
-        <nav class="navbar navbar-dark bg-dark navbar-expand-lg fixed-top">
+        <nav class="navbar navbar-dark bg-dark navbar-expand-lg fixed-top" aria-label="Primary navigation">
             <div class="container">
                 <a class="navbar-brand" href="index.html">Statistics Parser</a>
                 <button class="navbar-toggler" type="button"
                     data-bs-toggle="collapse"
-                    data-bs-target="#navbarCollapseDiv">
+                    data-bs-target="#navbarCollapseDiv"
+                    aria-controls="navbarCollapseDiv"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarCollapseDiv">
@@ -30,7 +34,7 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link active"
-                                href="about.html">About</a>
+                                href="about.html" aria-current="page">About</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link"
@@ -60,7 +64,7 @@
             </div>
         </nav>
 
-        <div class="container">
+        <main class="container" id="main-content">
 
             <h1>Statistics Parser</h1>
             <div>
@@ -98,8 +102,7 @@
                 </p>
                 <p>Richie</p>
 
-                <p>&nbsp;</p>
-                <h4>Special Thanks</h4>
+                <h2>Special Thanks</h2>
                 <ul>
                     <li>Dave Nicolas (<a
                             href="https://twitter.com/dvee81">twitter</a>): For
@@ -138,7 +141,7 @@
                     <li>Roshak (<a href="https://github.com/Roshak">GitHub</a>):
                         For Adding Italian language support.</li>
                 </ul>
-            </div>
+            </main>
 
         </div>
         <!-- /container -->
