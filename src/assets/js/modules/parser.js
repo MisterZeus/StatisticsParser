@@ -538,9 +538,6 @@ function parseData(text, lang) {
                 rowNumber += 1;
                 rowData = loadStatsIOInfo(i, rowNumber, lineData.columns, values, lang);
 
-                console.log(i);
-                console.log(rowData)
-
                 // If the row has segment reads or skipped, add the values to the last row in the current group
                 if (rowData.segmentreads > 0 || rowData.segmentskipped > 0) {
                     currentGroupObj.data[currentGroupObj.data.length - 1].segmentreads = rowData.segmentreads;

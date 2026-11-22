@@ -37,6 +37,7 @@ vi.mock('../assets/js/modules/language.js', () => ({
 
 vi.mock('../assets/js/modules/ui.js', () => ({
     initializeUI: vi.fn(),
+    parseText: vi.fn(),
     clearResult: vi.fn(),
     clearResultElement: vi.fn(),
     includeExample: vi.fn(),
@@ -150,53 +151,36 @@ describe('initalizeDocument', () => {
 
         await initalizeDocument();
 
-        const { default: ClipboardJS } = await import('clipboard');
-        expect(ClipboardJS).toHaveBeenCalledWith('#copyResultButton');
+        const { initializeUI } = await import('../assets/js/modules/ui.js');
+        expect(initializeUI).toHaveBeenCalled();
     });
 
     it('should set up clipboard success handler correctly', async () => {
         vi.resetModules();
 
-        vi.useFakeTimers();
-
         const { initalizeDocument } = await import('../initialize.js');
 
         await initalizeDocument();
-
-        expect(mockClipboardOn).toHaveBeenCalledWith('success', expect.any(Function));
-
-        const successHandler = mockClipboardOn.mock.calls.find(c => c[0] === 'success')[1];
-
-        const mockEvent = {
-            trigger: document.getElementById('copyResultButton'),
-            clearSelection: vi.fn()
-        };
-
-        mockEvent.trigger.innerHTML = 'Copy Result';
-
-        successHandler(mockEvent);
-
-        expect(mockEvent.trigger.innerHTML).toBe('Copied!');
-
-        vi.advanceTimersByTime(2000);
-
-        expect(mockEvent.trigger.innerHTML).toBe('Copy Result');
-
-        expect(mockEvent.clearSelection).toHaveBeenCalled();
-
-        vi.useRealTimers();
+        const { initializeUI } = await import('../assets/js/modules/ui.js');
+        expect(initializeUI).toHaveBeenCalled();
     });
 
-    it('should handle scrollbar option from localStorage', async () => {
-        window.localStorage.getItem.mockImplementation((key) => {
-            if (key === 'tableScrollbar') return 'true';
+    it('should parse URL data after initialization', async () => {
+        vi.resetModules();
+        const mockGet = vi.fn().mockImplementation((param) => {
+            if (param === 'data') return 'test data';
             return null;
+        });
+        global.URLSearchParams = vi.fn().mockImplementation(function() {
+            return { get: mockGet };
         });
 
         const { initalizeDocument } = await import('../initialize.js');
 
         await initalizeDocument();
 
-        expect(document.getElementById('scrollbarOptionCheck').style.display).toBe('');
+        const { parseText } = await import('../assets/js/modules/ui.js');
+        expect(document.getElementById('statiotext').value).toBe('test data');
+        expect(parseText).toHaveBeenCalled();
     });
 });

@@ -10,6 +10,7 @@ import {
     initializeUI
 } from '../ui.js';
 import ClipboardJS from 'clipboard';
+import { parseData } from '../parser.js';
 
 // Mock ClipboardJS - must use function (not arrow) for constructor
 const mockClipboardOn = vi.fn();
@@ -27,15 +28,14 @@ vi.mock('../storage.js', () => ({
 
 // Mock parser module
 vi.mock('../parser.js', () => ({
-    parseText: vi.fn().mockReturnValue({
+    parseData: vi.fn().mockReturnValue({
         data: [{ rowtype: 1 }]
     })
 }));
 
-// Make parseText available globally
-global.parseText = vi.fn().mockReturnValue({
-    data: [{ rowtype: 1 }]
-});
+vi.mock('../displaystats.js', () => ({
+    displayParsedData: vi.fn()
+}));
 
 describe('UI Module', () => {
     let mockElements;
@@ -338,8 +338,8 @@ describe('UI Module', () => {
                 // Verify result controls were shown
                 expect(mockElements.resultControls.style.display).toBe('block');
 
-                // Verify parseText was called
-                expect(global.parseText).toHaveBeenCalled();
+                // Verify parser was called
+                expect(parseData).toHaveBeenCalled();
             });
         });
 

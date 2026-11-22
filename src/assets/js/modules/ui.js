@@ -1,9 +1,10 @@
 import ClipboardJS from 'clipboard';
 import {
     getTableScrollbarPreference,
-    toggleStoredBoolean,
-    setTableScrollbarPreference
+    toggleStoredBoolean
 } from './storage.js';
+import { parseData } from './parser.js';
+import { displayParsedData } from './displaystats.js';
 
 
 // UI module for handling user interface elements and interactions
@@ -55,6 +56,22 @@ export function toggleCheckmark(checkmarkSpan, storageKey) {
 export function includeExample(value, lang) {
     const txt = document.getElementById("statiotext");
     txt.value = value ? lang.sampleoutput : "";
+}
+
+export function parseText(lang) {
+    clearResultElement(document.getElementById("result"), lang);
+
+    const iotext = document.getElementById("statiotext").value;
+    const showScrollbar = getTableScrollbarPreference();
+    const parsedData = parseData(iotext, lang);
+    displayParsedData(parsedData, showScrollbar, lang);
+
+    if (lang.buttonclearresult) {
+        document.getElementById("clearButton").innerHTML = lang.buttonclearresult;
+    }
+
+    toggleResultControls(parsedData.data.length > 0);
+    return parsedData;
 }
 
 /**
@@ -138,14 +155,7 @@ export function initializeUI(lang) {
 function setupButtonHandlers(lang) {
     // Parse button
     document.getElementById('parseButton').onclick = function() {
-        clearResultElement(document.getElementById("result"), lang);
-        const parsedData = parseText(lang);
-        
-        if (lang.buttonclearresult) {
-            document.getElementById("clearButton").innerHTML = lang.buttonclearresult;
-        }
-        
-        toggleResultControls(parsedData.data.length > 0);
+        parseText(lang);
     };
 
     // Clear button

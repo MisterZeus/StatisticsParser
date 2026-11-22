@@ -53,19 +53,23 @@ async function getLanguageText(languageType = 'en') {
  * @param {Object} langText - The language text object
  */
 function updateUIElements(langText) {
+    const resultElement = document.getElementById("result");
+
     // Update text elements
-    if (langText.showexample) {
-        document.getElementById("exampleText").innerHTML = langText.showexample;
+    const exampleText = document.getElementById("exampleText");
+    if (exampleText && langText.showexample) {
+        exampleText.textContent = langText.showexample;
     }
 
-    if (langText.tableshavescrollbars) {
-        document.getElementById("scrollbarOptionText").innerHTML = langText.tableshavescrollbars;
+    const scrollbarOptionText = document.getElementById("scrollbarOptionText");
+    if (scrollbarOptionText && langText.tableshavescrollbars) {
+        scrollbarOptionText.textContent = langText.tableshavescrollbars;
     }
     
     // Update button texts
     if (langText.buttonclear) {
         const clearButton = document.getElementById("clearButton");
-        clearButton.innerHTML = document.getElementById("result").style.display === 'none' 
+        clearButton.innerHTML = resultElement?.style.display === 'none'
             ? langText.buttonclear 
             : langText.buttonclearresult;
     }
