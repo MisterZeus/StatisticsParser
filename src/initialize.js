@@ -20,13 +20,13 @@ export async function initalizeDocument() {
     initializeUI(window.langText);
 
     document.querySelectorAll('[data-lang]').forEach(element => {
-        element.onclick = async function (e) {
+        element.addEventListener('click', async function (e) {
             e.preventDefault();
             window.langText = await initializeLanguage(this.dataset.lang);
             if (document.getElementById("statiotext").value) {
                 parseText(window.langText);
             }
-        };
+        });
     });
 
     // Parse URL-provided data after all handlers have been registered.

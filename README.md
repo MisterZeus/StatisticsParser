@@ -13,7 +13,7 @@ Useful links:
 
 ### Prerequisites
 
-- Node.js (v16 or higher)
+- Node.js (v20.19 or higher)
 - npm (comes with Node.js)
 - Git
 
@@ -79,12 +79,14 @@ StatisticsParser/
 │   │   │   │   ├── parser.js      # Core parsing logic
 │   │   │   │   ├── language.js    # Language handling
 │   │   │   │   └── ui.js          # UI components
-│   │   │   ├── main.js            # Main application entry
-│   │   │   └── statisticsparser.js # Display logic
-│   │   ├── css/
-│   │   │   └── styles.scss        # Main styles
-│   │   └── data/
-│   │       └── languagetext-*.json # Language files
+│   │   │   └── displaystats.js    # Display logic
+│   │   └── public/
+│   │       └── data/
+│   │           └── languagetext-*.json # Language files
+│   ├── styles/
+│   │   └── styles.scss            # Main styles
+│   ├── main.js                    # Main application entry
+│   ├── initialize.js              # Document initialization
 │   └── index.html                 # Main HTML file
 ├── dist/                          # Production build output
 ├── package.json                   # Project configuration
@@ -96,7 +98,8 @@ StatisticsParser/
 - `npm run dev` - Start development server
 - `npm run build` - Create production build
 - `npm run preview` - Preview production build
-- `npm run test` - Start vitest test runner.
+- `npm run test` - Run Vitest tests once
+- `npm run coverage` - Run tests with coverage
 
 ### Contributing
 

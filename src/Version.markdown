@@ -1,5 +1,29 @@
 # StatisticsIOParser Version History #
 
+## Version 0.6.0 ##
+November 22, 2026
+
+- Fixed URL data parsing so pasted Statistics IO and Time output is parsed after UI initialization.
+- Removed duplicate clipboard, scroll-to-top, scrollbar, and button initialization.
+- Added the missing shared parse-and-display function and corrected language switching to reparse existing output.
+- Fixed broken About-page language links and malformed external links.
+- Removed parser debug output and removed the Clipboard.js and Luxon runtime dependencies.
+- Replaced Luxon duration and timestamp formatting with native JavaScript and Intl APIs.
+- Replaced Clipboard.js with the browser Clipboard API and a compatibility fallback.
+- Unified the project on `datatables.net-bs5` and removed duplicate DataTables packages.
+- Improved parser table-name and timing-line handling, including regex escaping and malformed-input guards.
+- Added skip-navigation links, `<main>` landmarks, textarea labels, navigation labels, and scroll-button button semantics.
+- Removed obsolete HTML markup and duplicate CDN styles.
+- Modernized Sass imports, removed legacy CSS declarations and unnecessary `!important` rules, and improved responsive layouts.
+- Removed the Bootstrap Icons dependency and replaced the remaining icon glyphs with accessible text characters.
+- Updated Vite, Vitest, coverage tooling, jsdom, Sass, Bootstrap, and DataTables to current releases.
+- Added Popper as the explicit Bootstrap dropdown peer dependency.
+- Fixed Vitest 5 global setup compatibility and restored the coverage test script.
+- Updated package metadata, Node.js requirements, README instructions, and build configuration.
+- Added coverage output to `.gitignore`.
+- Corrected remaining About-page markup and removed stale inline styles.
+- All 69 regression tests pass and the production build succeeds.
+
 ## Version 0.5.0 ##
 June 1, 2025
 

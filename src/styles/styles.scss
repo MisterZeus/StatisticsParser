@@ -2,13 +2,13 @@
 @use "bootstrap/scss/bootstrap";
 @use "datatables.net-bs5/css/dataTables.bootstrap5.min.css";
 
+body {
+    padding-top: 60px;
+}
+
 @media (min-width: 1200px) {
     .container {
         max-width: 85%;
-    }
-
-    body {
-        padding-top: 60px;
     }
 }
 

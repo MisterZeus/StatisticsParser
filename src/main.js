@@ -1,5 +1,5 @@
-// Import all of Bootstrap's JS
-import * as bootstrap from 'bootstrap'
+// Import Bootstrap's JS for navbar and dropdown behavior
+import 'bootstrap'
 import 'datatables.net-bs5';
 
 import { initalizeDocument } from './initialize.js';

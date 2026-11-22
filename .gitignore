@@ -115,6 +115,7 @@ node_modules/
 # This is because github pages does not allow you
 # to serve files from the node_modules/ or dist/ folders.
 dist/
+coverage/
 
 .DS_Store
 
