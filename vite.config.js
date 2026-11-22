@@ -4,7 +4,7 @@ import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
-import packagejson from './package.json';
+import packagejson from './package.json' with { type: 'json' };
 const versionnumber = packagejson.version;
 
 // Get the directory name of the current module
@@ -37,19 +37,6 @@ export default defineConfig(({ command }) => ({
   server: {
     port: 3000,
     open: true
-  },
-  resolve: {
-    alias: {
-      '~bootstrap': resolve(__dirname, 'node_modules/bootstrap'),
-      'bootstrap-icons': resolve(__dirname, 'node_modules/bootstrap-icons/font/bootstrap-icons.css'),
-    }
-  },
-  optimizeDeps: {
-    include: [
-      'bootstrap',
-      'bootstrap-icons',
-      'datatables.net-bs5',
-    ]
   },
   plugins: [
     {

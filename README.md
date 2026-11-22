@@ -35,7 +35,6 @@ npm install
 This will install all required packages including:
 
 - Vite (build tool)
-- Luxon (date/time handling)
 - DataTables (table display)
 - Bootstrap (UI framework)
 - SASS (CSS preprocessing)
@@ -49,7 +48,7 @@ This will install all required packages including:
 npm run dev
 ```
 
-This will start Vite's development server with hot module replacement (HMR) enabled. The application will be available at `http://localhost:5173` by default.
+This will start Vite's development server with hot module replacement (HMR) enabled. The application will be available at `http://localhost:3000` by default.
 
 1. Make your changes to the code. The development server will automatically reload when you save changes.
 
