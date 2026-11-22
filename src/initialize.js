@@ -23,6 +23,9 @@ export async function initalizeDocument() {
         element.onclick = async function (e) {
             e.preventDefault();
             window.langText = await initializeLanguage(this.dataset.lang);
+            if (document.getElementById("statiotext").value) {
+                parseText(window.langText);
+            }
         };
     });
 

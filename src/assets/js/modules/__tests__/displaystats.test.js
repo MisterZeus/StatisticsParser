@@ -1,10 +1,10 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { displayParsedData } from '../displaystats.js';
 import { rowEnum, columnIOEnum } from '../parser.js';
-import DataTable from 'datatables.net-dt';
+import DataTable from 'datatables.net-bs5';
 
 // Mock DataTable - must use function (not arrow) for constructor
-vi.mock('datatables.net-dt', () => {
+vi.mock('datatables.net-bs5', () => {
     const mockDestroy = vi.fn();
     const mockDataTable = vi.fn().mockImplementation(function() {
         return { destroy: mockDestroy };

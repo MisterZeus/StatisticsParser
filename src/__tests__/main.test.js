@@ -1,14 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { JSDOM } from 'jsdom';
 
-// Mock ClipboardJS - must use function (not arrow) for constructor
-const mockClipboardOn = vi.fn();
-vi.mock('clipboard', () => ({
-    default: vi.fn(function() {
-        return { on: mockClipboardOn };
-    })
-}));
-
 // Mock the modules imported by initialize.js
 vi.mock('../assets/js/modules/displaystats.js', () => ({
     displayParsedData: vi.fn()
@@ -85,7 +77,6 @@ describe('initalizeDocument', () => {
         const mockSearchParams = new URLSearchParams();
         vi.spyOn(window, 'URLSearchParams').mockImplementation(() => mockSearchParams);
 
-        mockClipboardOn.mockClear();
     });
 
     afterEach(() => {

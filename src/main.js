@@ -1,6 +1,5 @@
 // Import all of Bootstrap's JS
 import * as bootstrap from 'bootstrap'
-import 'datatables.net';
 import 'datatables.net-bs5';
 
 import { initalizeDocument } from './initialize.js';

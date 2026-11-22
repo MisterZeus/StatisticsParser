@@ -1,6 +1,5 @@
 // Import dependencies
-import { DateTime, Duration } from 'luxon';
-import DataTable from 'datatables.net-dt';
+import DataTable from 'datatables.net-bs5';
 import { rowEnum, columnIOEnum } from './parser.js';
 
 // Display functionality
@@ -9,13 +8,15 @@ function formatNumber(value, langvalue = 'en') {
 }
 
 function formatMs(milliseconds) {
-    try {
-        return Duration.fromMillis(milliseconds)
-            .toFormat("hh:mm:ss.SSS");
-    } catch (error) {
-        console.error('Error formatting duration:', error);
-        return '00:00:00.000';
-    }
+    const totalMilliseconds = Number.isFinite(Number(milliseconds))
+        ? Math.max(0, Math.trunc(Number(milliseconds)))
+        : 0;
+    const hours = Math.floor(totalMilliseconds / 3600000);
+    const minutes = Math.floor((totalMilliseconds % 3600000) / 60000);
+    const seconds = Math.floor((totalMilliseconds % 60000) / 1000);
+    const millisecondsPart = totalMilliseconds % 1000;
+
+    return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}.${String(millisecondsPart).padStart(3, '0')}`;
 }
 
 function formatExtendedTimestamp(text, locale = 'en') {
@@ -27,19 +28,16 @@ function formatExtendedTimestamp(text, locale = 'en') {
 
         // Rebuild a valid ISO string with only milliseconds for Luxon parsing
         const truncatedISO = `${baseISO}.${fractional.substring(0, 3)}${offset}`;
-        const dt = DateTime.fromISO(truncatedISO).setLocale(locale);
-    
-        // Format date parts using Luxon with locale
-        const datePart = dt.toLocaleString({
-            month: 'numeric',
-            day: 'numeric',
-            year: 'numeric'
-        });
-    
-        const timePart = dt.toFormat('HH:mm:ss');
-    
-        // Rebuild final string
-        return `${datePart} ${timePart}.${fractional} ${offset}`;
+        const date = new Date(truncatedISO);
+        if (!Number.isNaN(date.getTime())) {
+            const datePart = new Intl.DateTimeFormat(locale, {
+                month: 'numeric',
+                day: 'numeric',
+                year: 'numeric'
+            }).format(date);
+            const timePart = `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}:${String(date.getSeconds()).padStart(2, '0')}`;
+            return `${datePart} ${timePart}.${fractional} ${offset}`;
+        }
         
     } else {
         return text;
@@ -47,6 +45,9 @@ function formatExtendedTimestamp(text, locale = 'en') {
 }
 
 function createDataTable(tableid, data, columns, showScrollbar = false) {
+    if (DataTable.isDataTable?.(`#${tableid}`)) {
+        DataTable(`#${tableid}`).destroy();
+    }
     return new DataTable(`#${tableid}`, {
         data: data,
         columns: columns,
@@ -434,7 +435,7 @@ function displayTimeTable(data, lang) {
         const td = document.createElement('td');
         td.className = 'statsio-footer-column';
         td.colSpan = 3;  // or 3 for time tables
-        td.textContent = 'Summary row detectd. Row not added to total.';
+        td.textContent = 'Summary row detected. Row not added to total.';
         footerRow.appendChild(td);
     
         tfoot.appendChild(footerRow);
@@ -524,19 +525,12 @@ function displayIOTotalTable(rowdata, columns, lang) {
 }
 
 function displayTimeTotalTable(executiondata, compiledata, lang) {
-    // Convert to Luxon Duration for calculations
-
     if (executiondata === undefined || compiledata === undefined) {
         return;
     }
 
-    const cpuTotal = Duration.fromMillis(parseInt(compiledata.cpu))
-        .plus(Duration.fromMillis(parseInt(executiondata.cpu)))
-        .toMillis();
-    
-    const elapsedTotal = Duration.fromMillis(parseInt(compiledata.elapsed))
-        .plus(Duration.fromMillis(parseInt(executiondata.elapsed)))
-        .toMillis();
+    const cpuTotal = Number(compiledata.cpu) + Number(executiondata.cpu);
+    const elapsedTotal = Number(compiledata.elapsed) + Number(executiondata.elapsed);
 
     const columns = [
         { 

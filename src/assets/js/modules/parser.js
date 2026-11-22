@@ -136,7 +136,8 @@ class CompletionTimeInfo {
 // Utility functions
 
 function processTimeRegEx(preText, postText) {
-    return new RegExp("(.*" + preText + "+)(.*?)(\\s+" + postText + ".*)");
+    const escapeRegex = value => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    return new RegExp("(.*" + escapeRegex(preText) + "+)(.*?)(\\s+" + escapeRegex(postText) + ".*)");
 }
 
 // Data processing functions
@@ -205,9 +206,14 @@ function getIOColumnEnum(columnname, lang) {
 
 function parseIOStatLine(line, lang) {
     // Match pattern: Table 'TableName'. Rest of stats...
-    const tableMatch = line.match(new RegExp(`${lang.table}\\s+['"]([^']+)['"]`));
-    const tableName = tableMatch ? tableMatch[1] : '';
-    const statsText = line.substring(line.indexOf('.') + 1).trim();
+    const escapeRegex = value => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const tablePattern = escapeRegex(lang.table);
+    const tableMatch = line.match(new RegExp(`${tablePattern}\\s+(['"])(.*?)\\1`));
+    const tableName = tableMatch ? tableMatch[2] : '';
+    const afterTable = tableMatch
+        ? line.substring(tableMatch.index + tableMatch[0].length)
+        : '';
+    const statsText = afterTable.replace(/^\.?\s*/, '').trim();
 
     return {
         table: tableName,
@@ -320,15 +326,17 @@ function loadStatsIOInfo(linenumber, rownumber, columns, values, lang) {
 
 function getTimeData(linenumber, line, cputime, elapsedtime, milliseconds, rowtype) {
     const section = line.split(',');
+    if (section.length < 2) return null;
     const re = processTimeRegEx(cputime, milliseconds);
     const re2 = processTimeRegEx(elapsedtime, milliseconds);
+    const cpu = section[0].replace(re, "$2").trim();
+    const elapsed = section[1].replace(re2, "$2").trim();
+    const cpuValue = Number.parseInt(cpu, 10);
+    const elapsedValue = Number.parseInt(elapsed, 10);
 
-    return new StatsTimeInfo(
-        linenumber,
-        section[0].replace(re, "$2"),
-        section[1].replace(re2, "$2"),
-        rowtype
-    );
+    if (!Number.isFinite(cpuValue) || !Number.isFinite(elapsedValue)) return null;
+
+    return new StatsTimeInfo(linenumber, cpuValue, elapsedValue, rowtype);
 }
 
 function getRowsAffectedData(linenumber, line, lang) {
@@ -484,6 +492,22 @@ function statsIOComputeGrandTotal(statTotal, statInfo) {
  * @returns {Object} Parsed data object
  */
 function parseData(text, lang) {
+    if (typeof text !== 'string' || !lang) {
+        return {
+            data: [],
+            tablecount: 0,
+            total: {
+                executiontotal: new StatsTimeInfoTotal(rowEnum.ExecutionTimeTotal),
+                compiletotal: new StatsTimeInfoTotal(rowEnum.CompileTimeTotal),
+                iototal: {
+                    columns: [],
+                    data: [],
+                    total: new StatsIOInfoTotal(),
+                    tableid: 'resultTableTotal'
+                }
+            }
+        };
+    }
     const lines = text.split('\n').map(line => line.replace(/\r$/, ''));
     let tableCount = 0;
     const executionTotal = new StatsTimeInfoTotal(rowEnum.ExecutionTimeTotal);
@@ -628,7 +652,6 @@ function parseData(text, lang) {
             tableid: 'resultTableTotal'
         }
     };
-    // console.log(JSON.stringify(parsedData, null, 2));
     return parsedData;
 
 }

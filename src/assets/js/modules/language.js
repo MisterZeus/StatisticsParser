@@ -69,21 +69,28 @@ function updateUIElements(langText) {
     // Update button texts
     if (langText.buttonclear) {
         const clearButton = document.getElementById("clearButton");
-        clearButton.innerHTML = resultElement?.style.display === 'none'
-            ? langText.buttonclear 
-            : langText.buttonclearresult;
+        if (clearButton) {
+            clearButton.textContent = resultElement?.style.display === 'block' || resultElement?.children.length
+                ? langText.buttonclearresult
+                : langText.buttonclear;
+        }
     }
     
     if (langText.buttonparse) {
-        document.getElementById("parseButton").innerHTML = langText.buttonparse;
+        const parseButton = document.getElementById("parseButton");
+        if (parseButton) parseButton.textContent = langText.buttonparse;
     }
     
     if (langText.buttoncopyresult) {
-        document.getElementById("copyResultButton").innerHTML = langText.buttoncopyresult;
+        const copyButton = document.getElementById("copyResultButton");
+        if (copyButton) copyButton.textContent = langText.buttoncopyresult;
     }
     
     // Update language dropdown
-    document.getElementById("languageDropdown").textContent = langText.langname || "Language";
+    const languageDropdown = document.getElementById("languageDropdown");
+    if (languageDropdown) {
+        languageDropdown.textContent = langText.langname || "Language";
+    }
 }
 
 /**

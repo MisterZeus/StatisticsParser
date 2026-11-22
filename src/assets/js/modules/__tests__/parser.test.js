@@ -44,8 +44,6 @@ describe('Parser Module', () => {
                 if (expected === null) {
                     throw new Error(`Unsupported language: ${lang}`);
                 }
-                console.log(expected);
-                console.log(result);
                 expect(expected).toEqual(result)
             })
         })

@@ -1,4 +1,3 @@
-import ClipboardJS from 'clipboard';
 import {
     getTableScrollbarPreference,
     toggleStoredBoolean
@@ -15,13 +14,16 @@ import { displayParsedData } from './displaystats.js';
  * @param {Object} lang - Language object for text
  */
 export function clearResultElement(resultElement, lang) {
+    if (!resultElement) return;
     while (resultElement.firstChild) {
         resultElement.removeChild(resultElement.firstChild);
     }
-    document.getElementById("resultControls").style.display = 'none';
+    const resultControls = document.getElementById("resultControls");
+    if (resultControls) resultControls.style.display = 'none';
 
     if(lang.buttonclear) {
-        document.getElementById("clearButton").innerHTML = lang.buttonclear;
+        const clearButton = document.getElementById("clearButton");
+        if (clearButton) clearButton.textContent = lang.buttonclear;
     }
 }
 
@@ -67,7 +69,7 @@ export function parseText(lang) {
     displayParsedData(parsedData, showScrollbar, lang);
 
     if (lang.buttonclearresult) {
-        document.getElementById("clearButton").innerHTML = lang.buttonclearresult;
+        document.getElementById("clearButton").textContent = lang.buttonclearresult;
     }
 
     toggleResultControls(parsedData.data.length > 0);
@@ -79,9 +81,10 @@ export function parseText(lang) {
  */
 export function initializeScrollToTop() {
     const scrollToTopButton = document.getElementById('scrollToTop');
-    
+    if (!scrollToTopButton) return;
+
     window.addEventListener('scroll', () => {
-        if (window.pageYOffset > 100) {
+        if ((window.scrollY ?? window.pageYOffset ?? 0) > 100) {
             scrollToTopButton.classList.add('visible');
         } else {
             scrollToTopButton.classList.remove('visible');
@@ -100,23 +103,45 @@ export function initializeScrollToTop() {
  * Initializes clipboard functionality
  * @param {Object} lang - Language object for button text
  */
+export async function copyResultText() {
+    const result = document.getElementById('result');
+    const text = result?.innerText || result?.textContent || '';
+
+    if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(text);
+        return;
+    }
+
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = '0';
+    document.body.appendChild(textarea);
+    textarea.select();
+    const copied = typeof document.execCommand === 'function'
+        && document.execCommand('copy');
+    textarea.remove();
+
+    if (!copied) {
+        throw new Error('Unable to copy result');
+    }
+}
+
 export function initializeClipboard(lang) {
-    const clipboard = new ClipboardJS('#copyResultButton');
-    
-    clipboard.on('success', function(e) {
-        const button = e.trigger;
-        const originalText = button.innerHTML;
-        button.innerHTML = lang.buttoncopyresultmessage;
-        
-        setTimeout(() => {
-            button.innerHTML = originalText;
-        }, 2000);
-        
-        e.clearSelection();
-    });
-    
-    clipboard.on('error', function(e) {
-        console.error('Failed to copy text: ', e.action);
+    const button = document.getElementById('copyResultButton');
+    if (!button) return;
+
+    button.addEventListener('click', async () => {
+        const originalText = button.textContent;
+        try {
+            await copyResultText();
+            button.textContent = lang.buttoncopyresultmessage;
+            setTimeout(() => {
+                button.textContent = originalText;
+            }, 2000);
+        } catch (error) {
+            console.error('Failed to copy text:', error);
+        }
     });
 }
 
@@ -125,7 +150,8 @@ export function initializeClipboard(lang) {
  * @param {boolean} hasData - Whether there is data to display
  */
 export function toggleResultControls(hasData) {
-    document.getElementById("resultControls").style.display = hasData ? 'block' : 'none';
+    const resultControls = document.getElementById("resultControls");
+    if (resultControls) resultControls.style.display = hasData ? 'block' : 'none';
 }
 
 /**
@@ -141,7 +167,8 @@ export function initializeUI(lang) {
     
     // Set up scrollbar option
     if(getTableScrollbarPreference()) {
-        document.getElementById("scrollbarOptionCheck").style.display = '';
+        const scrollbarOption = document.getElementById("scrollbarOptionCheck");
+        if (scrollbarOption) scrollbarOption.style.display = '';
     }
     
     // Set up button handlers
@@ -154,23 +181,27 @@ export function initializeUI(lang) {
  */
 function setupButtonHandlers(lang) {
     // Parse button
-    document.getElementById('parseButton').onclick = function() {
-        parseText(lang);
+    const parseButton = document.getElementById('parseButton');
+    if (parseButton) parseButton.onclick = function() {
+        parseText(window.langText || lang);
     };
 
     // Clear button
-    document.getElementById('clearButton').onclick = function() {
-        clearResult(lang);
+    const clearButton = document.getElementById('clearButton');
+    if (clearButton) clearButton.onclick = function() {
+        clearResult(window.langText || lang);
     };
 
     // Example option
-    document.getElementById('exampleOptionCheck').parentElement.onclick = function(e) {
+    const exampleOption = document.getElementById('exampleOptionCheck')?.parentElement;
+    if (exampleOption) exampleOption.onclick = function(e) {
         e.preventDefault();
         includeExample(true, lang);
     };
 
     // Scrollbar option
-    document.getElementById('scrollbarOptionCheck').parentElement.onclick = function(e) {
+    const scrollbarOption = document.getElementById('scrollbarOptionCheck')?.parentElement;
+    if (scrollbarOption) scrollbarOption.onclick = function(e) {
         e.preventDefault();
         toggleCheckmark(document.getElementById("scrollbarOptionCheck"), 'tableScrollbar');
     };

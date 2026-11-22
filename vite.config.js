@@ -19,7 +19,6 @@ try {
   googleAnalytics = envData.googleanalytics || '';
 } catch (error) {
   // File doesn't exist or is invalid, use empty string
-  console.log('No .env.json file found, using empty string for googleAnalytics');
   googleAnalytics = '';
 }
 
@@ -47,14 +46,9 @@ export default defineConfig(({ command }) => ({
   },
   optimizeDeps: {
     include: [
-      'jquery',
       'bootstrap',
       'bootstrap-icons',
-      'datatables.net',
       'datatables.net-bs5',
-      'datatables.net-dt',
-      'luxon',
-      'clipboard'
     ]
   },
   plugins: [
