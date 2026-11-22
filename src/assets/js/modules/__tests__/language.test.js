@@ -19,6 +19,7 @@ describe('Language Module', () => {
 
     afterEach(() => {
         vi.clearAllMocks()
+        vi.unstubAllGlobals()
         document.body.innerHTML = ''
     })
 
@@ -56,11 +57,11 @@ describe('Language Module', () => {
         };
 
         beforeEach(() => {
-            global.fetch = vi.fn();
-            global.window = {
+            vi.stubGlobal('fetch', vi.fn());
+            vi.stubGlobal('window', {
                 location: { href: 'http://localhost' },
                 history: { pushState: vi.fn() }
-            };
+            });
         });
 
         it('should fetch and return language text', async () => {
@@ -152,11 +153,11 @@ describe('Language Module', () => {
         };
 
         beforeEach(() => {
-            global.fetch = vi.fn();
-            global.window = {
+            vi.stubGlobal('fetch', vi.fn());
+            vi.stubGlobal('window', {
                 location: { href: 'http://localhost' },
                 history: { pushState: vi.fn() }
-            };
+            });
         });
 
         it('should initialize with default language (en)', async () => {

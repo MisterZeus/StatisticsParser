@@ -84,16 +84,16 @@ describe('UI Module', () => {
         };
 
         // Setup document mock
-        global.document = {
+        vi.stubGlobal('document', {
             getElementById: vi.fn((id) => mockElements[id])
-        };
+        });
 
         // Setup window mock
-        global.window = {
+        vi.stubGlobal('window', {
             addEventListener: vi.fn(),
             pageYOffset: 0,
             scrollTo: vi.fn()
-        };
+        });
 
         // Reset parseText mock before each test
         vi.fn().mockClear();
@@ -101,6 +101,7 @@ describe('UI Module', () => {
 
     afterEach(() => {
         vi.clearAllMocks();
+        vi.unstubAllGlobals();
         // Clean up mocks
         Object.values(mockElements).forEach(element => {
             if (element.classList) {
@@ -213,16 +214,16 @@ describe('UI Module', () => {
         beforeEach(() => {
             vi.useFakeTimers();
             mockElements.result.textContent = 'Parsed result';
-            global.navigator = {
+            vi.stubGlobal('navigator', {
                 clipboard: {
                     writeText: vi.fn().mockResolvedValue(undefined)
                 }
-            };
+            });
         });
 
         afterEach(() => {
             vi.useRealTimers();
-            delete global.navigator;
+            vi.unstubAllGlobals();
         });
 
         it('should initialize clipboard functionality', () => {
@@ -250,11 +251,11 @@ describe('UI Module', () => {
 
         it('should handle copy error', async () => {
             const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-            global.navigator = {
+            vi.stubGlobal('navigator', {
                 clipboard: {
                     writeText: vi.fn().mockRejectedValue(new Error('copy failed'))
                 }
-            };
+            });
 
             initializeClipboard({
                 buttoncopyresultmessage: 'Copied!'

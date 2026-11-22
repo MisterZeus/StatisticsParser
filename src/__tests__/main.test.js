@@ -50,17 +50,15 @@ describe('initalizeDocument', () => {
         window = dom.window;
         document = window.document;
 
-        global.window = window;
-        global.document = document;
-        global.navigator = window.navigator;
+        vi.stubGlobal('window', window);
+        vi.stubGlobal('document', document);
+        vi.stubGlobal('navigator', window.navigator);
 
         const localStorage = {
             getItem: vi.fn(),
             setItem: vi.fn()
         };
-        Object.defineProperty(window, 'localStorage', {
-            value: localStorage
-        });
+        vi.stubGlobal('localStorage', localStorage);
 
         document.body.innerHTML = `
             <textarea id="statiotext"></textarea>
@@ -80,9 +78,7 @@ describe('initalizeDocument', () => {
     });
 
     afterEach(() => {
-        delete global.window;
-        delete global.document;
-        delete global.navigator;
+        vi.unstubAllGlobals();
     });
 
     it('should initialize with default language when no lang parameter is present', async () => {

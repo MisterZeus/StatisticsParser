@@ -79,11 +79,12 @@ describe('displayParsedData', () => {
         };
 
         // Replace globals
-        global.document = mockDocument;
+        vi.stubGlobal('document', mockDocument);
     });
 
     afterEach(() => {
         vi.clearAllMocks();
+        vi.unstubAllGlobals();
     });
 
     it('should handle example data with multiple tables and statistics', () => {

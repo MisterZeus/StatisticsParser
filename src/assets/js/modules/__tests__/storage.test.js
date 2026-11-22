@@ -25,11 +25,12 @@ describe('Storage Module', () => {
         };
 
         // Replace the global localStorage with our mock
-        global.localStorage = mockLocalStorage;
+        vi.stubGlobal('localStorage', mockLocalStorage);
     });
 
     afterEach(() => {
         vi.clearAllMocks();
+        vi.unstubAllGlobals();
     });
 
     describe('getStoredValue', () => {
